@@ -43,3 +43,6 @@ Thumbs.db
 
 # Windows system files
 Desktop.ini
+
+__pycache__/
+*.pyc
