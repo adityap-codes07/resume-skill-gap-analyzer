@@ -1,34 +1,3 @@
-Yes. ✅
-You must add a .gitignore file — especially since you are using:
-
-.venv/
-
-__pycache__/
-
-Streamlit
-
-PyCharm
-
-Without .gitignore, you risk pushing:
-
-Your virtual environment (very heavy ❌)
-
-Compiled Python files
-
-IDE settings
-
-System junk files
-
-That looks unprofessional.
-
-✅ Create .gitignore in Project Root
-
-Create this file:
-
-resume-skill-gap-analyzer/.gitignore
-
-Put this inside:
-
 # ===============================
 # Python
 # ===============================
@@ -36,24 +5,41 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.egg-info/
+*.egg
+build/
+dist/
 
-# Virtual Environment
+# Virtual environments
 .venv/
 venv/
 env/
 
-# Streamlit secrets
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Streamlit
 .streamlit/secrets.toml
 
-# PyCharm / IntelliJ
+# IDE (PyCharm / IntelliJ)
 .idea/
 
 # VS Code
 .vscode/
 
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
 # OS files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
+# Windows system files
+Desktop.ini
