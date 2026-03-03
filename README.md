@@ -35,18 +35,36 @@ It provides features such as:
 ## 📂 Project Structure
 
 
-ResumeSkillGapAnalyzer/
+```text
+resume-skill-gap-analyzer/
 │
-├── app.py
-├── requirements.txt
+├── .streamlit/
+│   └── config.toml
+│
 ├── src/
-│ ├── services/ # ML & scoring logic
-│ ├── utils/ # Text preprocessing
-│ ├── ui/ # UI components & charts
-│ ├── constants.py # Skill lists & weights
-│ └── config.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── scoring.py
+│   │
+│   ├── ui/
+│   │   ├── __init__.py
+│   │   ├── charts.py
+│   │   ├── components.py
+│   │   └── styles.py
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── config.py
+│       └── constants.py
+│
+├── tests/
+│
+├── .gitignore
+├── app.py
+├── README.md
+└── requirements.txt
 
-
+```
 ---
 
 ## 🚀 Installation
