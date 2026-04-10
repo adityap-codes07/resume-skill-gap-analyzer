@@ -35,7 +35,7 @@ def main():
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ===== RUN ANALYSIS =====
+    # ======= RUN ANALYSIS =======
     if st.button("🔬 Run Advanced Analysis", use_container_width=True):
         if not job_description or not resume_text:
             st.error("⚠️ Please provide both job description and resume content.")
