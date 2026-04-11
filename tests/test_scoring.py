@@ -1,7 +1,4 @@
-import pytest
-
 from src.services.scoring import run_analysis, build_recommendations
-
 
 JOB = """
 We are hiring a Python developer with experience in Flask, SQL, Git, Docker, and AWS.

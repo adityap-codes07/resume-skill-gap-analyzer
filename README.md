@@ -34,7 +34,6 @@ It provides features such as:
 
 ## 📂 Project Structure
 
-
 ```text
 resume-skill-gap-analyzer/
 │
@@ -58,6 +57,9 @@ resume-skill-gap-analyzer/
 │       └── constants.py
 │
 ├── tests/
+│   ├── conftest.py
+│   ├── test_processing.py
+│   ├── test_scoring.py
 │
 ├── .gitignore
 ├── app.py
@@ -88,14 +90,12 @@ pip install -r requirements.txt
 
 streamlit run app.py
 
-
 ---
 
 ## 🎯 Features
 
 - Advanced TF-IDF Similarity Scoring
 - Multi Category Weighted Evaluation
-- Industry Style Dashboard UI
 - Real Time Skill Gap Identification
 - Resume Improvement Suggestions
 
@@ -113,4 +113,5 @@ streamlit run app.py
 ## 👤 Author
 
 Aditya Prakash  
-CSBS Undergraduate | ML & Data Enthusiast
+Kammari Vivek Chary
+Pasunuri Namita Sri

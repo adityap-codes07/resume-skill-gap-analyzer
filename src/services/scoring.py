@@ -12,7 +12,7 @@ def technical_matching(job_text: str, resume_text: str):
     tfidf = vectorizer.fit_transform([job_text, resume_text])
     tfidf_score = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
 
-    job_skills = extract_skills(job_text, TECH_SKILLS)
+    job_skills = extract_skills(job_text, TECH_SKILLS)  # from src.utils.text file
     resume_skills = extract_skills(resume_text, TECH_SKILLS)
 
     skill_match = (len(set(job_skills) & set(resume_skills)) / len(job_skills)) if job_skills else 0
@@ -22,20 +22,20 @@ def technical_matching(job_text: str, resume_text: str):
 
 
 def run_analysis(job_description: str, resume_text: str) -> Dict[str, Any]:
-    job_clean = clean_text(job_description)
+    job_clean = clean_text(job_description)  # from src.utils.text file
     resume_clean = clean_text(resume_text)
 
     tech_score, job_skills, resume_skills = technical_matching(job_clean, resume_clean)
     matched_skills = list(set(job_skills) & set(resume_skills))
     missing_skills = list(set(job_skills) - set(resume_skills))
 
-    comm_found = extract_skills(resume_clean, COMMUNICATION_SKILLS)
+    comm_found = extract_skills(resume_clean, COMMUNICATION_SKILLS)  # from src.utils.constants file
     comm_score = min((len(comm_found) / max(len(COMMUNICATION_SKILLS), 1)) * 100, 100)
 
-    soft_found = extract_skills(resume_clean, SOFT_SKILLS)
+    soft_found = extract_skills(resume_clean, SOFT_SKILLS)  # from src.utils.constants file
     soft_score = min((len(soft_found) / max(len(SOFT_SKILLS), 1)) * 100, 100)
 
-    exp_found = extract_skills(resume_clean, EXPERIENCE_KEYWORDS)
+    exp_found = extract_skills(resume_clean, EXPERIENCE_KEYWORDS)   # from src.utils.constants file
     years_exp = extract_years_of_experience(resume_clean)
     exp_score = min((len(exp_found) / 8) * 100 + (years_exp * 5), 100)
 

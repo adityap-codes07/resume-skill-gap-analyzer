@@ -42,25 +42,25 @@ def main():
             return
 
         with st.spinner("🔄 Applying TF-IDF and similarity models..."):
-            result = run_analysis(job_description, resume_text)
+            result = run_analysis(job_description, resume_text)   # this function is present at src.services.scoring file
 
         # ===== RESULTS =====
         st.markdown("<br>", unsafe_allow_html=True)
         section_header("Analysis Results", "📊")
-        metrics_cards(result)
+        metrics_cards(result)   # this function is present at src.ui.components file
 
         section_header("Detailed Scoring Breakdown", "📈")
-        render_gauges(result)
+        render_gauges(result)   # this function is present at src.ui.charts file
 
         section_header("Category Breakdown", "📋")
-        df = build_breakdown_df(result)
+        df = build_breakdown_df(result)   # this function is present at src.services.scoring file
         st.dataframe(df, use_container_width=True, hide_index=True)
 
         section_header("Skills Intelligence", "🎯")
-        skills_block(result)
+        skills_block(result)   # this function is present at src.ui.components file
 
         section_header("ATS Optimization Insights", "💡")
-        recs = build_recommendations(result)
+        recs = build_recommendations(result)   # this function is present at src.services.scoring file
         if result["final_score"] >= 80:
             st.success("🎉 **Outstanding Match!** Your resume is highly competitive for this role. Consider applying immediately.")
         elif recs:
