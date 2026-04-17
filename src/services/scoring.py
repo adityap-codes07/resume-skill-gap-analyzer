@@ -8,15 +8,23 @@ from src.utils.text import clean_text, extract_skills, extract_years_of_experien
 
 
 def technical_matching(job_text: str, resume_text: str):
-    vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 3), max_features=500)
-    tfidf = vectorizer.fit_transform([job_text, resume_text])
-    tfidf_score = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
-
-    job_skills = extract_skills(job_text, TECH_SKILLS)  # from src.utils.text file
+    job_skills = extract_skills(job_text, TECH_SKILLS)
     resume_skills = extract_skills(resume_text, TECH_SKILLS)
 
-    skill_match = (len(set(job_skills) & set(resume_skills)) / len(job_skills)) if job_skills else 0
-    final_score = (tfidf_score * 0.6 + skill_match * 0.4) * 100
+    if not job_skills:
+        # No tech skills required in JD → full marks
+        return 100.0, job_skills, resume_skills
+
+    skill_match = len(set(job_skills) & set(resume_skills)) / len(job_skills)
+
+    # Only use TF-IDF as a bonus when job skills is detailed enough (4+ words)
+    if len(job_skills) >= 5:
+        vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 3), max_features=500)
+        tfidf = vectorizer.fit_transform([job_text, resume_text])
+        tfidf_score = cosine_similarity(tfidf[0:1], tfidf[1:2])[0][0]
+        final_score = (tfidf_score * 0.4 + skill_match * 0.6) * 100
+    else:
+        final_score = skill_match * 100
 
     return final_score, job_skills, resume_skills
 
@@ -29,15 +37,28 @@ def run_analysis(job_description: str, resume_text: str) -> Dict[str, Any]:
     matched_skills = list(set(job_skills) & set(resume_skills))
     missing_skills = list(set(job_skills) - set(resume_skills))
 
-    comm_found = extract_skills(resume_clean, COMMUNICATION_SKILLS)  # from src.utils.constants file
-    comm_score = min((len(comm_found) / max(len(COMMUNICATION_SKILLS), 1)) * 100, 100)
+    jd_comm_skills = extract_skills(job_clean, COMMUNICATION_SKILLS)
+    if jd_comm_skills:
+        comm_found = extract_skills(resume_clean, COMMUNICATION_SKILLS)
+        comm_score = min((len(set(comm_found) & set(jd_comm_skills)) / len(jd_comm_skills)) * 100, 100)
+    else:
+        comm_score = 100.0  # JD doesn't require communication skills → full marks
 
-    soft_found = extract_skills(resume_clean, SOFT_SKILLS)  # from src.utils.constants file
-    soft_score = min((len(soft_found) / max(len(SOFT_SKILLS), 1)) * 100, 100)
+    jd_soft_skills = extract_skills(job_clean, SOFT_SKILLS)
+    if jd_soft_skills:
+        soft_found = extract_skills(resume_clean, SOFT_SKILLS)
+        soft_score = min((len(set(soft_found) & set(jd_soft_skills)) / len(jd_soft_skills)) * 100, 100)
+    else:
+        soft_score = 100.0  # JD doesn't require soft skills → full marks
 
-    exp_found = extract_skills(resume_clean, EXPERIENCE_KEYWORDS)   # from src.utils.constants file
+    jd_exp_keywords = extract_skills(job_clean, EXPERIENCE_KEYWORDS)
     years_exp = extract_years_of_experience(resume_clean)
-    exp_score = min((len(exp_found) / 8) * 100 + (years_exp * 5), 100)
+    if jd_exp_keywords:
+        exp_found = extract_skills(resume_clean, EXPERIENCE_KEYWORDS)
+        exp_score = min((len(set(exp_found) & set(jd_exp_keywords)) / len(jd_exp_keywords)) * 100 + (years_exp * 5),
+                        100)
+    else:
+        exp_score = 100.0 if years_exp > 0 else 50.0  # No exp required → generous default
 
     final_score = (
         tech_score * WEIGHTS["technical"] +
@@ -68,6 +89,9 @@ def run_analysis(job_description: str, resume_text: str) -> Dict[str, Any]:
         "job_skills": job_skills,
         "resume_skills": resume_skills,
         "years_exp": years_exp,
+        "jd_comm_required": len(extract_skills(job_clean, COMMUNICATION_SKILLS)) > 0,
+        "jd_soft_required": len(extract_skills(job_clean, SOFT_SKILLS)) > 0,
+        "jd_exp_required": len(extract_skills(job_clean, EXPERIENCE_KEYWORDS)) > 0,
     }
 
 
@@ -106,7 +130,7 @@ def build_recommendations(result: Dict[str, Any]) -> List[Dict[str, str]]:
             "impact": "Will increase overall score by ~15-20 points",
         })
 
-    if comm_score < 60:
+    if comm_score < 60 and result.get("jd_comm_required"):
         recs.append({
             "priority": "🟡 Medium",
             "category": "Communication",
@@ -114,7 +138,7 @@ def build_recommendations(result: Dict[str, Any]) -> List[Dict[str, str]]:
             "impact": "Will improve overall score by ~8-12 points",
         })
 
-    if soft_score < 60:
+    if soft_score < 60 and result.get("jd_soft_required"):
         recs.append({
             "priority": "🟡 Medium",
             "category": "Soft Skills",
@@ -122,7 +146,7 @@ def build_recommendations(result: Dict[str, Any]) -> List[Dict[str, str]]:
             "impact": "Will improve overall score by ~8-12 points",
         })
 
-    if exp_score < 50:
+    if exp_score < 50 and result.get("jd_exp_required"):
         recs.append({
             "priority": "🟠 Medium-High",
             "category": "Experience",

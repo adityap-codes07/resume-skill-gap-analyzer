@@ -1,3 +1,5 @@
+import json, os
+
 TECH_SKILLS = {
     "python", "java", "javascript", "c++", "ruby", "go", "rust", "swift", "kotlin", "r", "shell",
     "html", "css", "react", "angular", "node", "express", "django", "flask", "fastapi", "spring", "next.js",
@@ -25,4 +27,8 @@ EXPERIENCE_KEYWORDS = [
     "contributed", "achieved", "improved", "optimized", "scaled"
 ]
 
-WEIGHTS = {"technical": 0.45, "communication": 0.20, "soft_skills": 0.20, "experience": 0.15}
+_weights_path = os.path.join(os.path.dirname(__file__), "ml_weights.json")
+
+if os.path.exists(_weights_path):
+    with open(_weights_path) as f:
+        WEIGHTS = json.load(f)
