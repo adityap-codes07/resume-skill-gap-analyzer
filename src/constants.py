@@ -1,13 +1,14 @@
 import json, os
 
 TECH_SKILLS = {
-    "python", "java", "javascript", "c++", "ruby", "go", "rust", "swift", "kotlin", "r", "shell",
-    "html", "css", "react", "angular", "node", "express", "django", "flask", "fastapi", "spring", "next.js",
+    "python", "java", "javascript", "c", "c#", "c++", "ruby", "go", "rust", "swift", "kotlin", "r", "shell",
+    "html", "css", "react", "angular", "node.js", "express", "django", "flask", "fastapi", "spring boot", "next.js",
     "sql", "mysql", "postgresql", "mongodb", "oracle", "sql server", "elasticsearch", "neo4j", "sqlite",
     "aws", "azure", "docker", "kubernetes", "jenkins", "ci/cd", "git", "github", "gitlab",
     "machine learning", "deep learning", "nlp", "computer vision", "tensorflow", "pytorch", "scikit-learn",
     "pandas", "numpy", "tableau", "power bi", "data science", "statistics",
-    "rest api", "graphql", "agile", "scrum", "linux", "unix", "windows", "networking", "security", "testing"
+    "rest api", "graphql", "agile", "scrum", "linux", "unix", "windows", "networking", "security", "testing", "dart",
+    "npm", "firebase"
 }
 
 COMMUNICATION_SKILLS = [
