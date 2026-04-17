@@ -112,6 +112,6 @@ streamlit run app.py
 
 ## 👤 Author
 
-Aditya Prakash  
-Kammari Vivek Chary
-Pasunuri Namita Sri
+- Aditya Prakash  
+- Kammari Vivek Chary
+- Pasunuri Namita Sri
